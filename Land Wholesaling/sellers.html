@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QuickLandsDeals - For Land Sellers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --brand-green: #016d3e;
+            --brand-dark: #212121;
+            --brand-light: #e6f9ed;
+            --accent: #ffd700;
+            --secondary: #1a90ff;
+            --danger: #e53935;
+            --modal-bg: #fff;
+            --shadow: 0 4px 20px rgba(44,204,64,0.10);
+            --border-contrast: #027a48;
+        }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(22,183,72,0.15) 0%, rgba(26,144,255,0.15) 100%),
+                url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--brand-dark);
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2em;
+            margin-bottom: 0.2em;
+        }
+        .brand-logo {
+            height: 90px;
+            width: 90px;
+            object-fit: contain;
+            border-radius: 18px;
+            margin-bottom: 0.2em;
+            box-shadow: 0 4px 30px #0002;
+            background: #fff;
+            border: 3px solid var(--brand-green);
+        }
+        .brand-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--brand-green);
+            letter-spacing: 1px;
+            text-shadow: 0 2px 12px #fff, 0 2px 10px #001e0b22;
+        }
+        @media (max-width: 650px) {
+            .brand-title { font-size: 1.6rem; }
+            .brand-logo { height: 60px; width: 60px; }
+        }
+        .hero {
+            background: linear-gradient(135deg, rgba(255,215,0,0.11) 0%, rgba(1,109,62,0.11) 100%), var(--brand-light);
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow);
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .hero h2 {
+            color: var(--brand-green);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 14px #fff;
+        }
+        .hero p {
+            max-width: 700px;
+            color: #03532b;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 7px #fff;
+        }
+        .cta-link {
+            display: inline-block;
+            margin-top: 2rem;
+            background: var(--accent);
+            color: var(--brand-dark);
+            font-weight: 700;
+            padding: 0.75rem 2.2rem;
+            border-radius: 2em;
+            font-size: 1.15rem;
+            box-shadow: 0 2px 10px #ffd70022;
+            text-decoration: none;
+            border: 2px solid var(--brand-green);
+            transition: background 0.2s, color 0.2s, border 0.2s;
+            cursor: pointer;
+        }
+        .cta-link:hover, .cta-link:focus {
+            background: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: auto;
+            background: rgba(1, 68, 33, 0.38);
+            transition: background 0.2s;
+        }
+        .modal-content {
+            background: var(--modal-bg);
+            margin: 4% auto;
+            padding: 2.3rem 2rem 2rem 2rem;
+            border-radius: 1.25rem;
+            width: 92%;
+            max-width: 430px;
+            box-shadow: 0 8px 36px #01442118, 0 1.5px 8px #0002;
+            position: relative;
+            animation: popIn 0.28s cubic-bezier(.57,1.48,.46,.87);
+        }
+        @keyframes popIn {
+            from {
+                transform: scale(0.96);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .close {
+            color: var(--brand-dark);
+            position: absolute;
+            right: 1.2rem;
+            top: 1.1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close:hover {
+            color: var(--brand-green);
+        }
+        .modal-content h2 {
+            color: var(--brand-green);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        label {
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+            color: var(--brand-green);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 0.57rem 0.7rem;
+            border: 2px solid var(--border-contrast);
+            border-radius: 0.7em;
+            margin-bottom: 0.2rem;
+            font-size: 1rem;
+            background: #fff;
+            color: var(--brand-dark);
+            transition: border 0.2s, background 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: 2px solid var(--secondary);
+            border-color: var(--secondary);
+            background: #f0f6ff;
+        }
+        ::placeholder {
+            color: #027a48;
+            opacity: 1;
+        }
+        .file-upload-section {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--brand-dark);
+            background: #fffde4;
+            border-radius: 0.6em;
+            padding: 0.9em 1em 0.5em 1em;
+            font-size: 1.03em;
+            border: 2px solid var(--accent);
+        }
+        .file-upload-section label {
+            margin-top: 0.3em;
+            color: var(--brand-green);
+        }
+        .map-section {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        #map {
+            width: 100%;
+            height: 240px;
+            border-radius: 0.7em;
+            border: 2px solid var(--border-contrast);
+            margin-bottom: 0.5rem;
+        }
+        .map-instructions {
+            color: var(--secondary);
+            font-size: 0.99em;
+            margin-bottom: 0.3em;
+            font-weight: 600;
+        }
+        button {
+            display: block;
+            width: 100%;
+            background: var(--brand-green);
+            color: #fff;
+            border: 2px solid var(--brand-green);
+            border-radius: 2em;
+            padding: 0.8rem 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-top: 1.9rem;
+            box-shadow: 0 1.5px 6px #01442120;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        button:hover, button:focus {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+        .success {
+            color: #fff;
+            background: var(--secondary);
+            border-radius: 0.7em;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 700;
+            padding: 0.7em;
+            font-size: 1.08em;
+            box-shadow: 0 1px 6px #1a90ff25;
+        }
+        .contact-info {
+            max-width: 430px;
+            margin: 3rem auto 1.5rem auto;
+            padding: 1.2rem 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255,215,0,0.11) 0%, rgba(1,109,62,0.11) 100%), var(--brand-light);
+            border-radius: 1.1rem;
+            box-shadow: 0 2px 12px #027a4820;
+            border: 2px solid var(--brand-green);
+        }
+        .contact-info h3 {
+            color: var(--secondary);
+            margin-bottom: 0.4em;
+            font-weight: 800;
+        }
+        .contact-info a {
+            color: var(--danger);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+            color: var(--secondary);
+        }
+        .contact-social {
+            margin-top: 0.7em;
+        }
+        .contact-social a {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 0.2em;
+            color: var(--brand-green);
+            font-size: 1.25em;
+        }
+        .contact-social a.instagram {
+            color: #C13584;
+        }
+        .contact-social svg {
+            vertical-align: middle;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 2rem auto 2rem 0;
+            background: var(--brand-green);
+            color: #fff;
+            font-weight: 700;
+            padding: 0.4em 2em;
+            border-radius: 2em;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px #016d3e15;
+            text-decoration: none;
+            border: 2px solid var(--brand-green);
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        .back-link:hover, .back-link:focus {
+            background: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+        }
+        @media (max-width: 650px) {
+            .brand-title { font-size: 1.6rem; }
+            .brand-logo { height: 60px; width: 60px; }
+            .hero { padding: 1.3rem 0.7rem 1.2rem 0.7rem; }
+            .container { padding: 1.2rem 0.2rem; }
+            .modal-content { padding: 1.2rem 0.7rem 1.2rem 0.7rem;}
+            .contact-info { padding: 0.9rem 0.3rem; font-size: 1rem; }
+            #map { height: 160px; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">&larr; Back to Home</a>
+        <div class="brand">
+            <img src="logo.png" alt="Quick Lands Deals Logo" class="brand-logo" />
+            <span class="brand-title">QuickLandsDeals</span>
+        </div>
+        <div class="hero">
+            <h2>Sell Your Land Fast, Easy, and Secure</h2>
+            <p>
+                Welcome to <span style="color:var(--accent);font-weight:bold;">QuickLandsDeals</span> — the best place to sell land fast, directly to serious buyers.
+                <br>
+                <a id="openModal" class="cta-link">Submit Your Property</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Seller Modal -->
+    <div id="propertyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Submit Your Land Property to QuickLandsDeals</h2>
+            <form id="propertyForm" action="https://formsubmit.co/QuickLandsDeals@outlook.com" method="POST" enctype="multipart/form-data">
+                <label for="owner">Owner Name</label>
+                <input type="text" id="owner" name="Owner Name" required>
+
+                <label for="email">Contact Email</label>
+                <input type="email" id="email" name="Contact Email" required>
+
+                <label for="phone">Contact Phone Number <span style="font-weight:normal; color:var(--brand-green);">(optional, but encouraged)</span></label>
+                <input type="tel" id="phone" name="Contact Phone" placeholder="e.g., 618-409-7470">
+
+                <label for="location">Property Location</label>
+                <input type="text" id="location" name="Property Location" required>
+
+                <label for="lot_size">Lot Size (acres or sq ft)</label>
+                <input type="text" id="lot_size" name="Lot Size" placeholder="e.g., 2 acres or 87,120 sq ft" required>
+
+                <label for="lot_zoning">Current Zoning Classification</label>
+                <input type="text" id="lot_zoning" name="Zoning" placeholder="e.g., Residential, Commercial, Agricultural" required>
+
+                <label for="water_source">Water Source</label>
+                <select id="water_source" name="Water Source" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="Municipal">Municipal</option>
+                    <option value="Well">Well</option>
+                    <option value="None">No water source</option>
+                    <option value="Other">Other (describe below)</option>
+                </select>
+                <input type="text" id="water_source_details" name="Water Source Details" placeholder="If 'Other', please specify" style="margin-bottom: 1rem;"/>
+
+                <label for="sewage">Sewage System</label>
+                <select id="sewage" name="Sewage" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="Municipal">Municipal</option>
+                    <option value="Septic Tank">Septic Tank</option>
+                    <option value="None">No sewage system</option>
+                    <option value="Other">Other (describe below)</option>
+                </select>
+                <input type="text" id="sewage_details" name="Sewage Details" placeholder="If 'Other', please specify" style="margin-bottom: 1rem;"/>
+
+                <label for="power">Access to Electricity/Power Utilities</label>
+                <select id="power" name="Power" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Nearby">Utilities nearby but not connected</option>
+                </select>
+
+                <label for="price">Asking Price ($)</label>
+                <input type="number" id="price" name="Asking Price" min="0" step="0.01" required>
+
+                <label for="description">Property Description</label>
+                <textarea id="description" name="Description" rows="4" placeholder="Please provide any additional details about your property" required></textarea>
+
+                <div class="file-upload-section">
+                    <label for="file_upload">Optional: Upload property images or documents</label>
+                    <input type="file" id="file_upload" name="Attachment" accept="image/*,.pdf,.doc,.docx,.png,.jpg,.jpeg,.gif" multiple>
+                    <small style="display:block; color:var(--brand-green); margin-top:0.2em;">You may select multiple files.</small>
+                </div>
+                
+                <div class="map-section">
+                    <div class="map-instructions">
+                        <strong>Optional:</strong> Click on the map to drop a pin at your property's location, or drag the marker to adjust.<br>
+                        (Latitude/Longitude will be submitted with your form)
+                    </div>
+                    <div id="map"></div>
+                    <input type="hidden" id="latitude" name="Latitude">
+                    <input type="hidden" id="longitude" name="Longitude">
+                </div>
+
+                <!-- Optional: redirect after submission -->
+                <!-- <input type="hidden" name="_next" value="https://yourdomain.com/thankyou.html"> -->
+
+                <button type="submit">Submit Property</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <h3>Contact Us</h3>
+        <div>
+            <strong>Email:</strong>
+            <a href="mailto:QuickLandsDeals@outlook.com">QuickLandsDeals@outlook.com</a>
+        </div>
+        <div>
+            <strong>Phone:</strong>
+            <a href="tel:16184097470">618-409-7470</a>
+        </div>
+        <div class="contact-social">
+            <strong>Instagram:</strong>
+            <a href="https://instagram.com/QuickLandsDeals" target="_blank" rel="noopener" class="instagram" aria-label="Instagram">
+                <svg width="20" height="20" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
+                    <path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.35-30.35C301.7,124,284.45,120,256,120s-45.7,4-62.36,11.31A54,54,0,0,0,163.29,161.71C156,178.37,152,195.62,152,224s4,45.7,11.31,62.36a54,54,0,0,0,30.35,30.35C210.3,388,227.55,392,256,392s45.7-4,62.36-11.31a54,54,0,0,0,30.35-30.35C392,301.7,396,284.45,396,256S392,210.3,384.71,163.66ZM224,338a82,82,0,1,1,82-82A82.09,82.09,0,0,1,224,338ZM370.9,144.1a24,24,0,1,1-24-24A24,24,0,0,1,370.9,144.1ZM398.8,101.7A94.44,94.44,0,0,0,346.3,49.2c-18.6-6.7-38.6-10.7-60.3-11.4C267.1,37.1,261.6,36,256,36H192c-5.6,0-11.1,1.1-16.1,1.8-21.7.7-41.7,4.7-60.3,11.4a94.44,94.44,0,0,0-52.5,52.5C37.1,122.9,33.1,142.9,32.4,164.6c-.7,5-.8,10.5-.8,16.1v64c0,5.6.1,11.1.8,16.1.7,21.7,4.7,41.7,11.4,60.3a94.44,94.44,0,0,0,52.5,52.5c18.6,6.7,38.6,10.7,60.3,11.4,5,.7,10.5.8,16.1.8h64c5.6,0,11.1-.1,16.1-.8,21.7-.7,41.7-4.1,60.3-11.4A94.44,94.44,0,0,0,373.6,405.7c6.1-16,9.6-33.1,10.2-50.9.2-4.8.4-9.9.4-15s-.2-10.2-.4-15c-.6-17.8-4.1-34.9-10.2-50.9A66,66,0,0,1,373.6,178.3c16-6.1,33.1-9.6,50.9-10.2,4.8-.2,9.9-.4,15-.4s10.2.2,15,.4c17.8.6,34.9,4.1,50.9,10.2A66,66,0,0,1,373.6,405.7Z"/>
+                </svg>
+                @QuickLandsDeals
+            </a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Modal open/close logic
+        var modal = document.getElementById("propertyModal");
+        var openBtn = document.getElementById("openModal");
+        var closeBtn = document.getElementById("closeModal");
+
+        openBtn.onclick = function() {
+            modal.style.display = "block";
+            setTimeout(initializeMap, 300);
+        }
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+            document.getElementById('propertyForm').reset();
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.getElementById('propertyForm').reset();
+            }
+        }
+
+        document.getElementById('water_source').addEventListener('change', function() {
+            document.getElementById('water_source_details').style.display = this.value === 'Other' ? 'block' : 'none';
+        });
+        document.getElementById('water_source_details').style.display = 'none';
+        document.getElementById('sewage').addEventListener('change', function() {
+            document.getElementById('sewage_details').style.display = this.value === 'Other' ? 'block' : 'none';
+        });
+        document.getElementById('sewage_details').style.display = 'none';
+
+        // Map integration with Leaflet.js
+        var map, marker;
+        function initializeMap() {
+            if (map) return;
+            map = L.map('map').setView([37.0902, -95.7129], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            marker = L.marker([37.0902, -95.7129], {draggable: true}).addTo(map);
+
+            function updateLatLngFields(lat, lng) {
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            }
+            updateLatLngFields(37.0902, -95.7129);
+
+            marker.on('dragend', function(e) {
+                var latlng = marker.getLatLng();
+                updateLatLngFields(latlng.lat, latlng.lng);
+            });
+
+            map.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+                updateLatLngFields(e.latlng.lat, e.latlng.lng);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,10 +1,8 @@
----
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>QuickLandsDeals - For Land Buyers</title>
+    <title>QuickLandsDeals - For Land Sellers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
@@ -104,60 +102,6 @@
             color: #fff;
             border-color: var(--secondary);
         }
-        .contracts-section {
-            max-width: 800px;
-            margin: 2rem auto 2rem auto;
-            padding: 1.3rem 1.5rem 1rem 1.5rem;
-            text-align: center;
-            background: linear-gradient(135deg, rgba(255,215,0,0.11) 0%, rgba(1,109,62,0.11) 100%), var(--brand-light);
-            border-radius: 1.1rem;
-            box-shadow: 0 2px 12px #027a4820;
-            border: 2px solid var(--brand-green);
-        }
-        .contracts-section h2 {
-            color: var(--secondary);
-            font-size: 1.55rem;
-            margin-top: 0;
-            margin-bottom: 0.7rem;
-        }
-        .contracts-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 auto;
-            max-width: 400px;
-            text-align: left;
-        }
-        .contracts-list li {
-            margin: 0.6em 0;
-            background: #fff;
-            border-radius: 0.5em;
-            padding: 0.7em 1em;
-            border: 1.5px solid #c0f7d6;
-            box-shadow: 0 1px 6px #016d3e12;
-            display: flex;
-            align-items: center;
-            gap: 0.8em;
-        }
-        .contracts-list li svg {
-            color: var(--brand-green);
-            min-width: 1.3em;
-            min-height: 1.3em;
-        }
-        .contracts-list a {
-            color: var(--brand-green);
-            font-weight: 600;
-            text-decoration: underline;
-        }
-        .contracts-list a:hover {
-            color: var(--secondary);
-        }
-        .no-contracts {
-            text-align: center;
-            color: var(--danger);
-            font-style: italic;
-            margin-top: 2em;
-            font-size: 1.18em;
-        }
         .modal {
             display: none;
             position: fixed;
@@ -216,7 +160,7 @@
             font-weight: 700;
             color: var(--brand-green);
         }
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 0.57rem 0.7rem;
             border: 2px solid var(--border-contrast);
@@ -227,7 +171,7 @@
             color: var(--brand-dark);
             transition: border 0.2s, background 0.2s;
         }
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: 2px solid var(--secondary);
             border-color: var(--secondary);
             background: #f0f6ff;
@@ -235,6 +179,37 @@
         ::placeholder {
             color: #027a48;
             opacity: 1;
+        }
+        .file-upload-section {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--brand-dark);
+            background: #fffde4;
+            border-radius: 0.6em;
+            padding: 0.9em 1em 0.5em 1em;
+            font-size: 1.03em;
+            border: 2px solid var(--accent);
+        }
+        .file-upload-section label {
+            margin-top: 0.3em;
+            color: var(--brand-green);
+        }
+        .map-section {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        #map {
+            width: 100%;
+            height: 240px;
+            border-radius: 0.7em;
+            border: 2px solid var(--border-contrast);
+            margin-bottom: 0.5rem;
+        }
+        .map-instructions {
+            color: var(--secondary);
+            font-size: 0.99em;
+            margin-bottom: 0.3em;
+            font-weight: 600;
         }
         button {
             display: block;
@@ -252,13 +227,13 @@
             transition: background 0.2s, color 0.2s, border 0.2s;
         }
         button:hover, button:focus {
-            background: var(--secondary);
+            background: var(--danger);
             color: #fff;
-            border-color: var(--secondary);
+            border-color: var(--danger);
         }
         .success {
             color: #fff;
-            background: var(--brand-green);
+            background: var(--secondary);
             border-radius: 0.7em;
             margin-top: 1rem;
             text-align: center;
@@ -333,8 +308,10 @@
             .container { padding: 1.2rem 0.2rem; }
             .modal-content { padding: 1.2rem 0.7rem 1.2rem 0.7rem;}
             .contact-info { padding: 0.9rem 0.3rem; font-size: 1rem; }
+            #map { height: 160px; }
         }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
     <div class="container">
@@ -344,61 +321,94 @@
             <span class="brand-title">QuickLandsDeals</span>
         </div>
         <div class="hero">
-            <h2>Buy Land with Confidence</h2>
+            <h2>Sell Your Land Fast, Easy, and Secure</h2>
             <p>
-                Explore our available contracts and contact us to learn more or express your interest.<br>
-                <a id="openModal" class="cta-link">Contact Us About Buying Land</a>
-            </p>
-        </div>
-        <!-- Contracts Section (auto-list PDFs in contracts folder with Jekyll/Liquid) -->
-        <div class="contracts-section">
-            <h2>Available Land Contracts</h2>
-<ul class="contracts-list">
-  {% assign found_any = false %}
-  {% for file in site.static_files %}
-    {% if file.path contains '/contracts/' and file.extname == '.pdf' %}
-      {% assign found_any = true %}
-      <li>
-        <a href="{{ file.path | relative_url }}" target="_blank">
-          {{ file.name | split: "." | first | replace: "-", " " | replace: "_", " " }}
-        </a>
-      </li>
-    {% endif %}
-  {% endfor %}
-</ul>
-{% unless found_any %}
-  <div class="no-contracts">
-    No contracts available at this time. Please check back soon!
-  </div>
-{% endunless %}
-                       <p style="font-size:1em;color:#016d3e;margin-top:1.2em;">
-                Interested in a property? Click "Contact Us About Buying Land" above or <a href="mailto:QuickLandsDeals@outlook.com">email us</a> for more details.
+                Welcome to <span style="color:var(--accent);font-weight:bold;">QuickLandsDeals</span> — the best place to sell land fast, directly to serious buyers.
+                <br>
+                <a id="openModal" class="cta-link">Submit Your Property</a>
             </p>
         </div>
     </div>
 
-    <!-- Buyer Modal -->
-    <div id="buyerModal" class="modal" aria-modal="true" role="dialog" aria-labelledby="modalTitle" tabindex="-1">
+    <!-- Seller Modal -->
+    <div id="propertyModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
-            <h2 id="modalTitle">Contact Us About Buying Land</h2>
-            <form id="buyerForm" action="https://formsubmit.co/QuickLandsDeals@outlook.com" method="POST">
-                <label for="buyer_name">Your Name</label>
-                <input type="text" id="buyer_name" name="Name" required>
+            <h2>Submit Your Land Property to QuickLandsDeals</h2>
+            <form id="propertyForm" action="https://formsubmit.co/QuickLandsDeals@outlook.com" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_captcha" value="false">
+                <label for="owner">Owner Name</label>
+                <input type="text" id="owner" name="Owner Name" required>
 
-                <label for="buyer_email">Email Address</label>
-                <input type="email" id="buyer_email" name="Email" required>
+                <label for="email">Contact Email</label>
+                <input type="email" id="email" name="Contact Email" required>
 
-                <label for="buyer_phone">Phone Number</label>
-                <input type="tel" id="buyer_phone" name="Phone" placeholder="e.g., 618-409-7470">
+                <label for="phone">Contact Phone Number <span style="font-weight:normal; color:var(--brand-green);">(optional, but encouraged)</span></label>
+                <input type="tel" id="phone" name="Contact Phone" placeholder="e.g., 618-409-7470">
 
-                <label for="property_interest">Property of Interest</label>
-                <input type="text" id="property_interest" name="Property of Interest" placeholder="e.g., 2 Acres - Jefferson County">
+                <label for="location">Property Location</label>
+                <input type="text" id="location" name="Property Location" required>
 
-                <label for="buyer_message">Your Message</label>
-                <textarea id="buyer_message" name="Message" rows="4" placeholder="Ask us anything, or tell us about your needs..." required></textarea>
+                <label for="lot_size">Lot Size (acres or sq ft)</label>
+                <input type="text" id="lot_size" name="Lot Size" placeholder="e.g., 2 acres or 87,120 sq ft" required>
 
-                <button type="submit">Send Inquiry</button>
+                <label for="lot_zoning">Current Zoning Classification</label>
+                <input type="text" id="lot_zoning" name="Zoning" placeholder="e.g., Residential, Commercial, Agricultural" required>
+
+                <label for="water_source">Water Source</label>
+                <select id="water_source" name="Water Source" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="Municipal">Municipal</option>
+                    <option value="Well">Well</option>
+                    <option value="None">No water source</option>
+                    <option value="Other">Other (describe below)</option>
+                </select>
+                <input type="text" id="water_source_details" name="Water Source Details" placeholder="If 'Other', please specify" style="margin-bottom: 1rem;"/>
+
+                <label for="sewage">Sewage System</label>
+                <select id="sewage" name="Sewage" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="Municipal">Municipal</option>
+                    <option value="Septic Tank">Septic Tank</option>
+                    <option value="None">No sewage system</option>
+                    <option value="Other">Other (describe below)</option>
+                </select>
+                <input type="text" id="sewage_details" name="Sewage Details" placeholder="If 'Other', please specify" style="margin-bottom: 1rem;"/>
+
+                <label for="power">Access to Electricity/Power Utilities</label>
+                <select id="power" name="Power" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Nearby">Utilities nearby but not connected</option>
+                </select>
+
+                <label for="price">Asking Price ($)</label>
+                <input type="number" id="price" name="Asking Price" min="0" step="0.01" required>
+
+                <label for="description">Property Description</label>
+                <textarea id="description" name="Description" rows="4" placeholder="Please provide any additional details about your property" required></textarea>
+
+                <div class="file-upload-section">
+                    <label for="file_upload">Optional: Upload property images or documents</label>
+                    <input type="file" id="file_upload" name="Attachment" accept="image/*,.pdf,.doc,.docx,.png,.jpg,.jpeg,.gif" multiple>
+                    <small style="display:block; color:var(--brand-green); margin-top:0.2em;">You may select multiple files.</small>
+                </div>
+                
+                <div class="map-section">
+                    <div class="map-instructions">
+                        <strong>Optional:</strong> Click on the map to drop a pin at your property's location, or drag the marker to adjust.<br>
+                        (Latitude/Longitude will be submitted with your form)
+                    </div>
+                    <div id="map"></div>
+                    <input type="hidden" id="latitude" name="Latitude">
+                    <input type="hidden" id="longitude" name="Longitude">
+                </div>
+
+                <!-- Optional: redirect after submission -->
+                <!-- <input type="hidden" name="_next" value="https://yourdomain.com/thankyou.html"> -->
+
+                <button type="submit">Submit Property</button>
             </form>
         </div>
     </div>
@@ -417,42 +427,71 @@
             <strong>Instagram:</strong>
             <a href="https://instagram.com/QuickLandsDeals" target="_blank" rel="noopener" class="instagram" aria-label="Instagram">
                 <svg width="20" height="20" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
-                    <path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.35-30.35C301.7,124,284.45,120,256,120s-45.7,4-62.36,11.31A54,54,0,0,0,..."/>
+                    <path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.35-30.35C301.7,124,284.45,120,256,120s-45.7,4-62.36,11.31A54,54,0,0,0,163.2[...]
                 </svg>
                 @QuickLandsDeals
             </a>
         </div>
     </div>
 
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         // Modal open/close logic
-        var modal = document.getElementById("buyerModal");
+        var modal = document.getElementById("propertyModal");
         var openBtn = document.getElementById("openModal");
         var closeBtn = document.getElementById("closeModal");
 
         openBtn.onclick = function() {
             modal.style.display = "block";
-            setTimeout(function() {
-                document.getElementById('buyer_name').focus();
-            }, 150);
+            setTimeout(initializeMap, 300);
         }
         closeBtn.onclick = function() {
             modal.style.display = "none";
-            document.getElementById('buyerForm').reset();
+            document.getElementById('propertyForm').reset();
         }
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
-                document.getElementById('buyerForm').reset();
+                document.getElementById('propertyForm').reset();
             }
         }
-        document.addEventListener('keydown', function(e) {
-            if (modal.style.display === "block" && e.key === 'Escape') {
-                modal.style.display = "none";
-                document.getElementById('buyerForm').reset();
-            }
+
+        document.getElementById('water_source').addEventListener('change', function() {
+            document.getElementById('water_source_details').style.display = this.value === 'Other' ? 'block' : 'none';
         });
+        document.getElementById('water_source_details').style.display = 'none';
+        document.getElementById('sewage').addEventListener('change', function() {
+            document.getElementById('sewage_details').style.display = this.value === 'Other' ? 'block' : 'none';
+        });
+        document.getElementById('sewage_details').style.display = 'none';
+
+        // Map integration with Leaflet.js
+        var map, marker;
+        function initializeMap() {
+            if (map) return;
+            map = L.map('map').setView([37.0902, -95.7129], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            marker = L.marker([37.0902, -95.7129], {draggable: true}).addTo(map);
+
+            function updateLatLngFields(lat, lng) {
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+            }
+            updateLatLngFields(37.0902, -95.7129);
+
+            marker.on('dragend', function(e) {
+                var latlng = marker.getLatLng();
+                updateLatLngFields(latlng.lat, latlng.lng);
+            });
+
+            map.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+                updateLatLngFields(e.latlng.lat, e.latlng.lng);
+            });
+        }
     </script>
 </body>
 </html>
-#work

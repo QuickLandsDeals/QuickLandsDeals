@@ -1,0 +1,459 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QuickLandsDeals - For Land Buyers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --brand-green: #016d3e;
+            --brand-dark: #212121;
+            --brand-light: #e6f9ed;
+            --accent: #ffd700;
+            --secondary: #1a90ff;
+            --danger: #e53935;
+            --modal-bg: #fff;
+            --shadow: 0 4px 20px rgba(44,204,64,0.10);
+            --border-contrast: #027a48;
+        }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background:
+                linear-gradient(135deg, rgba(22,183,72,0.15) 0%, rgba(26,144,255,0.15) 100%),
+                url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--brand-dark);
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2em;
+            margin-bottom: 0.2em;
+        }
+        .brand-logo {
+            height: 90px;
+            width: 90px;
+            object-fit: contain;
+            border-radius: 18px;
+            margin-bottom: 0.2em;
+            box-shadow: 0 4px 30px #0002;
+            background: #fff;
+            border: 3px solid var(--brand-green);
+        }
+        .brand-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--brand-green);
+            letter-spacing: 1px;
+            text-shadow: 0 2px 12px #fff, 0 2px 10px #001e0b22;
+        }
+        @media (max-width: 650px) {
+            .brand-title { font-size: 1.6rem; }
+            .brand-logo { height: 60px; width: 60px; }
+        }
+        .hero {
+            background: linear-gradient(135deg, rgba(255,215,0,0.11) 0%, rgba(1,109,62,0.11) 100%), var(--brand-light);
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow);
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .hero h2 {
+            color: var(--brand-green);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 14px #fff;
+        }
+        .hero p {
+            max-width: 700px;
+            color: #03532b;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 7px #fff;
+        }
+        .cta-link {
+            display: inline-block;
+            margin-top: 2rem;
+            background: var(--accent);
+            color: var(--brand-dark);
+            font-weight: 700;
+            padding: 0.75rem 2.2rem;
+            border-radius: 2em;
+            font-size: 1.15rem;
+            box-shadow: 0 2px 10px #ffd70022;
+            text-decoration: none;
+            border: 2px solid var(--brand-green);
+            transition: background 0.2s, color 0.2s, border 0.2s;
+            cursor: pointer;
+        }
+        .cta-link:hover, .cta-link:focus {
+            background: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+        }
+        .contracts-section {
+            max-width: 800px;
+            margin: 2rem auto 2rem auto;
+            padding: 1.3rem 1.5rem 1rem 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255,215,0,0.11) 0%, rgba(1,109,62,0.11) 100%), var(--brand-light);
+            border-radius: 1.1rem;
+            box-shadow: 0 2px 12px #027a4820;
+            border: 2px solid var(--brand-green);
+        }
+        .contracts-section h2 {
+            color: var(--secondary);
+            font-size: 1.55rem;
+            margin-top: 0;
+            margin-bottom: 0.7rem;
+        }
+        .contracts-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 400px;
+            text-align: left;
+        }
+        .contracts-list li {
+            margin: 0.6em 0;
+            background: #fff;
+            border-radius: 0.5em;
+            padding: 0.7em 1em;
+            border: 1.5px solid #c0f7d6;
+            box-shadow: 0 1px 6px #016d3e12;
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+        }
+        .contracts-list li svg {
+            color: var(--brand-green);
+            min-width: 1.3em;
+            min-height: 1.3em;
+        }
+        .contracts-list a {
+            color: var(--brand-green);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+        .contracts-list a:hover {
+            color: var(--secondary);
+        }
+        .no-contracts {
+            text-align: center;
+            color: var(--danger);
+            font-style: italic;
+            margin-top: 2em;
+            font-size: 1.18em;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: auto;
+            background: rgba(1, 68, 33, 0.38);
+            transition: background 0.2s;
+        }
+        .modal-content {
+            background: var(--modal-bg);
+            margin: 4% auto;
+            padding: 2.3rem 2rem 2rem 2rem;
+            border-radius: 1.25rem;
+            width: 92%;
+            max-width: 430px;
+            box-shadow: 0 8px 36px #01442118, 0 1.5px 8px #0002;
+            position: relative;
+            animation: popIn 0.28s cubic-bezier(.57,1.48,.46,.87);
+        }
+        @keyframes popIn {
+            from {
+                transform: scale(0.96);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .close {
+            color: var(--brand-dark);
+            position: absolute;
+            right: 1.2rem;
+            top: 1.1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close:hover {
+            color: var(--brand-green);
+        }
+        .modal-content h2 {
+            color: var(--brand-green);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        label {
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+            color: var(--brand-green);
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.57rem 0.7rem;
+            border: 2px solid var(--border-contrast);
+            border-radius: 0.7em;
+            margin-bottom: 0.2rem;
+            font-size: 1rem;
+            background: #fff;
+            color: var(--brand-dark);
+            transition: border 0.2s, background 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: 2px solid var(--secondary);
+            border-color: var(--secondary);
+            background: #f0f6ff;
+        }
+        ::placeholder {
+            color: #027a48;
+            opacity: 1;
+        }
+        button {
+            display: block;
+            width: 100%;
+            background: var(--brand-green);
+            color: #fff;
+            border: 2px solid var(--brand-green);
+            border-radius: 2em;
+            padding: 0.8rem 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-top: 1.9rem;
+            box-shadow: 0 1.5px 6px #01442120;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        button:hover, button:focus {
+            background: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+        }
+        .success {
+            color: #fff;
+            background: var(--brand-green);
+            border-radius: 0.7em;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 700;
+            padding: 0.7em;
+            font-size: 1.08em;
+            box-shadow: 0 1px 6px #1a90ff25;
+        }
+        .contact-info {
+            max-width: 430px;
+            margin: 3rem auto 1.5rem auto;
+            padding: 1.2rem 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255,215,0,0.11) 0%, rgba(1,109,62,0.11) 100%), var(--brand-light);
+            border-radius: 1.1rem;
+            box-shadow: 0 2px 12px #027a4820;
+            border: 2px solid var(--brand-green);
+        }
+        .contact-info h3 {
+            color: var(--secondary);
+            margin-bottom: 0.4em;
+            font-weight: 800;
+        }
+        .contact-info a {
+            color: var(--danger);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+            color: var(--secondary);
+        }
+        .contact-social {
+            margin-top: 0.7em;
+        }
+        .contact-social a {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 0.2em;
+            color: var(--brand-green);
+            font-size: 1.25em;
+        }
+        .contact-social a.instagram {
+            color: #C13584;
+        }
+        .contact-social svg {
+            vertical-align: middle;
+        }
+        .back-link {
+            display: inline-block;
+            margin: 2rem auto 2rem 0;
+            background: var(--brand-green);
+            color: #fff;
+            font-weight: 700;
+            padding: 0.4em 2em;
+            border-radius: 2em;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 8px #016d3e15;
+            text-decoration: none;
+            border: 2px solid var(--brand-green);
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        .back-link:hover, .back-link:focus {
+            background: var(--secondary);
+            color: #fff;
+            border-color: var(--secondary);
+        }
+        @media (max-width: 650px) {
+            .brand-title { font-size: 1.6rem; }
+            .brand-logo { height: 60px; width: 60px; }
+            .hero { padding: 1.3rem 0.7rem 1.2rem 0.7rem; }
+            .container { padding: 1.2rem 0.2rem; }
+            .modal-content { padding: 1.2rem 0.7rem 1.2rem 0.7rem;}
+            .contact-info { padding: 0.9rem 0.3rem; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">&larr; Back to Home</a>
+        <div class="brand">
+            <img src="logo.png" alt="Quick Lands Deals Logo" class="brand-logo" />
+            <span class="brand-title">QuickLandsDeals</span>
+        </div>
+        <div class="hero">
+            <h2>Buy Land with Confidence</h2>
+            <p>
+                Explore our available contracts and contact us to learn more or express your interest.<br>
+                <a id="openModal" class="cta-link">Contact Us About Buying Land</a>
+            </p>
+        </div>
+        <!-- Contracts Section (auto-list PDFs in contracts folder with Jekyll/Liquid) -->
+        <div class="contracts-section">
+            <h2>Available Land Contracts</h2>
+            <ul class="contracts-list">
+                {% assign found_any = false %}
+                {% for file in site.static_files %}
+                    {% if file.path contains '/contracts/' and file.extname == '.pdf' %}
+                        {% assign found_any = true %}
+                        <li>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M16 21v-2a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/>
+                            <a href="{{ file.path | relative_url }}" target="_blank">
+                                {{ file.name | split: "." | first | replace: "-", " " | replace: "_", " " }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            {% unless found_any %}
+                <div class="no-contracts">
+                    No contracts available at this time. Please check back soon!
+                </div>
+            {% endunless %}
+            <p style="font-size:1em;color:#016d3e;margin-top:1.2em;">
+                Interested in a property? Click "Contact Us About Buying Land" above or <a href="mailto:QuickLandsDeals@outlook.com">email us</a> for more details.
+            </p>
+        </div>
+    </div>
+
+    <!-- Buyer Modal -->
+    <div id="buyerModal" class="modal" aria-modal="true" role="dialog" aria-labelledby="modalTitle" tabindex="-1">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 id="modalTitle">Contact Us About Buying Land</h2>
+            <form id="buyerForm" action="https://formsubmit.co/QuickLandsDeals@outlook.com" method="POST">
+                <label for="buyer_name">Your Name</label>
+                <input type="text" id="buyer_name" name="Name" required>
+
+                <label for="buyer_email">Email Address</label>
+                <input type="email" id="buyer_email" name="Email" required>
+
+                <label for="buyer_phone">Phone Number</label>
+                <input type="tel" id="buyer_phone" name="Phone" placeholder="e.g., 618-409-7470">
+
+                <label for="property_interest">Property of Interest</label>
+                <input type="text" id="property_interest" name="Property of Interest" placeholder="e.g., 2 Acres - Jefferson County">
+
+                <label for="buyer_message">Your Message</label>
+                <textarea id="buyer_message" name="Message" rows="4" placeholder="Ask us anything, or tell us about your needs..." required></textarea>
+
+                <button type="submit">Send Inquiry</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <h3>Contact Us</h3>
+        <div>
+            <strong>Email:</strong>
+            <a href="mailto:QuickLandsDeals@outlook.com">QuickLandsDeals@outlook.com</a>
+        </div>
+        <div>
+            <strong>Phone:</strong>
+            <a href="tel:16184097470">618-409-7470</a>
+        </div>
+        <div class="contact-social">
+            <strong>Instagram:</strong>
+            <a href="https://instagram.com/QuickLandsDeals" target="_blank" rel="noopener" class="instagram" aria-label="Instagram">
+                <svg width="20" height="20" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
+                    <path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.35-30.35C301.7,124,284.45,120,256,120s-45.7,4-62.36,11.31A54,54,0,0,0,..."/>
+                </svg>
+                @QuickLandsDeals
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Modal open/close logic
+        var modal = document.getElementById("buyerModal");
+        var openBtn = document.getElementById("openModal");
+        var closeBtn = document.getElementById("closeModal");
+
+        openBtn.onclick = function() {
+            modal.style.display = "block";
+            setTimeout(function() {
+                document.getElementById('buyer_name').focus();
+            }, 150);
+        }
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+            document.getElementById('buyerForm').reset();
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.getElementById('buyerForm').reset();
+            }
+        }
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === "block" && e.key === 'Escape') {
+                modal.style.display = "none";
+                document.getElementById('buyerForm').reset();
+            }
+        });
+    </script>
+</body>
+</html>
+#work
